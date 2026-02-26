@@ -31,7 +31,7 @@ dialyzer : restore
 
 docs : restore
 	@printf "\033[36m~> mix docs\033[0m\n"
-	@mix docs
+	@MIX_ENV=docs mix docs
 
 # WARNING: Keep this task in sync with pr_validation.yml for parity
 validate : format lint compile test build-plt dialyzer docs
