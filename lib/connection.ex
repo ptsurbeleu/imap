@@ -1,4 +1,12 @@
 defmodule IMAP.Connection do
+  @moduledoc """
+  Manages the underlying TCP/SSL connection to an IMAP server.
+
+  Handles establishing, maintaining, and closing the socket connection.
+  Used internally by `IMAP` to send raw command data and receive server
+  responses.
+  """
+
   @doc false
   def connect(socket_module, host, port, opts) do
     socket_module.connect(host, port, opts, 5000)
