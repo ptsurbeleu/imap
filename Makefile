@@ -3,7 +3,7 @@
 #   > "Error opening ETS file $HOME/.hex/cache.ets: :badfile"
 restore :
 	@printf "\033[36m~> mix deps.get\033[0m\n"
-	@rm ~/.hex/cache.ets && mix deps.get
+	@rm -f ~/.hex/cache.ets && mix deps.get
 
 compile : restore
 	@printf "\033[36m~> mix compile --warnings-as-errors\033[0m\n"
