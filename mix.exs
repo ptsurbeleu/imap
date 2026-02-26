@@ -42,7 +42,7 @@ defmodule Imap.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      # {:castore, "~> 1.0"},
+      # NOTE: Useful to test integration with the target package
       # {:abnf_parsec, path: "../abnf_parsec", runtime: false},
       {:abnf_parsec, "~> 2.1", runtime: false},
       {:ex_doc, ">= 0.0.0", only: [:dev, :docs], runtime: false},
