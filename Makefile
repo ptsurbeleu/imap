@@ -21,10 +21,19 @@ lint : restore
 	@printf "\033[36m~> mix credo --strict\033[0m\n"
 	@mix credo --strict
 
+build-plt : restore
+	@printf "\033[36m~> mix dialyzer --plt\033[0m\n"
+	@mix dialyzer --plt
+
+dialyzer : restore
+	@printf "\033[36m~> mix dialyzer --format github --format dialyxir\033[0m\n"
+	@mix dialyzer --format github --format dialyxir
+
 docs : restore
 	@printf "\033[36m~> mix docs\033[0m\n"
 	@mix docs
 
-validate : compile test format lint docs
+# WARNING: Keep this task in sync with pr_validation.yml for parity
+validate : format lint compile test build-plt dialyzer docs
 
-.PHONY : compile test format lint validate restore docs
+.PHONY : compile test format lint validate restore docs build-plt dialyzer
