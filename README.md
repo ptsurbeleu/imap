@@ -19,3 +19,7 @@ end
 Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
 and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
 be found at <https://hexdocs.pm/imap>.
+
+## References
+ - (A gentle introduction to IMAP)[https://duesee.dev/p/a-gentle-introduction-to-imap/]
+ - (Why TLS is better without STARTTLS)[https://nostarttls.secvuln.info]

@@ -1,3 +1,6 @@
+# Miscellaneous
+parsers.log
+
 /.fetch
 *.ez
 *.beam

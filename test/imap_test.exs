@@ -1,8 +1,7 @@
-defmodule ImapTest do
+defmodule IMAPTest do
   use ExUnit.Case
-  doctest Imap
 
-  test "greets the world" do
-    assert Imap.hello() == :world
-  end
+  # test "greets the world" do
+  #   assert IMAP.connect() == :world
+  # end
 end
