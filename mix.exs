@@ -25,14 +25,14 @@ defmodule Imap.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      extra_applications: [:logger]
+      extra_applications: [:logger, :ssl]
     ]
   end
 
   defp package do
     [
       name: "imap",
-      files: ["lib", "test", "mix.exs", "README*", "LICENSE*"],
+      files: ["lib", "priv", "test", "mix.exs", "README*", "LICENSE*"],
       maintainers: ["Pavel Tsurbeleu <tussles.85titans@icloud.com>"],
       licenses: ["MIT"],
       links: %{"GitHub" => @source_url}
@@ -42,6 +42,9 @@ defmodule Imap.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
+      # {:castore, "~> 1.0"},
+      # {:abnf_parsec, path: "../abnf_parsec", runtime: false},
+      {:abnf_parsec, "~> 2.1", runtime: false},
       {:ex_doc, ">= 0.0.0", only: [:dev, :docs], runtime: false}
     ]
   end
