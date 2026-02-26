@@ -14,7 +14,6 @@ defmodule Imap.MixProject do
       deps: deps(),
       package: package(),
       description: "A library to interact with an IMAP server",
-
       name: "imap",
       source_url: @source_url,
       homepage_url: @source_url,
@@ -45,7 +44,8 @@ defmodule Imap.MixProject do
       # {:castore, "~> 1.0"},
       # {:abnf_parsec, path: "../abnf_parsec", runtime: false},
       {:abnf_parsec, "~> 2.1", runtime: false},
-      {:ex_doc, ">= 0.0.0", only: [:dev, :docs], runtime: false}
+      {:ex_doc, ">= 0.0.0", only: [:dev, :docs], runtime: false},
+      {:credo, "~> 1.7", only: [:dev, :test], runtime: false}
     ]
   end
 

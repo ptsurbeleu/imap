@@ -1,5 +1,5 @@
 defmodule IMAP.UntaggedResponse do
-  alias IMAP.{ResponseText}
+  alias IMAP.ResponseText
 
   @moduledoc """
     Untagged IMAP response.
