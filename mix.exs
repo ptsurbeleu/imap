@@ -17,7 +17,8 @@ defmodule Imap.MixProject do
       name: "imap",
       source_url: @source_url,
       homepage_url: @source_url,
-      docs: docs()
+      docs: docs(),
+      dialyzer: []
     ]
   end
 
@@ -45,7 +46,8 @@ defmodule Imap.MixProject do
       # {:abnf_parsec, path: "../abnf_parsec", runtime: false},
       {:abnf_parsec, "~> 2.1", runtime: false},
       {:ex_doc, ">= 0.0.0", only: [:dev, :docs], runtime: false},
-      {:credo, "~> 1.7", only: [:dev, :test], runtime: false}
+      {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
+      {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false}
     ]
   end
 
