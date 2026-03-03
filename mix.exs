@@ -15,12 +15,17 @@ defmodule Imap.MixProject do
       package: package(),
       description: "A library to interact with an IMAP server",
       name: "imap",
+      elixirc_paths: elixirc_paths(Mix.env()),
       source_url: @source_url,
       homepage_url: @source_url,
       docs: docs(),
       dialyzer: []
     ]
   end
+
+  defp elixirc_paths(:test), do: ["lib", "test/support"]
+  defp elixirc_paths(:dev), do: ["lib", "test/support"]
+  defp elixirc_paths(_), do: ["lib"]
 
   # Run "mix help compile.app" to learn about applications.
   def application do
@@ -47,7 +52,8 @@ defmodule Imap.MixProject do
       {:abnf_parsec, "~> 2.1", runtime: false},
       {:ex_doc, ">= 0.0.0", only: [:dev, :docs], runtime: false},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
-      {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false}
+      {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false},
+      {:mox, "~> 1.2", only: [:dev, :test], runtime: false}
     ]
   end
 

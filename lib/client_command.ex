@@ -18,7 +18,7 @@ defmodule IMAP.ClientCommand do
           params: list()
         }
 
-  defstruct tag: "TAG", command: nil, params: []
+  defstruct tag: nil, command: nil, params: []
 
   @ops [
     noop: [],
