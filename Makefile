@@ -9,11 +9,18 @@ compile : restore
 	@printf "\033[36m~> mix compile --warnings-as-errors\033[0m\n"
 	@mix compile --warnings-as-errors
 
+test-me:
+	@iex --dbg pry -S mix test --trace test/imap_test.exs
+
 test : restore
 	@printf "\033[36m~> mix test\033[0m\n"
 	@mix test
 
 format : restore
+	@printf "\033[36m~> mix format\033[0m\n"
+	@mix format
+
+check-formatted : restore
 	@printf "\033[36m~> mix format --check-formatted\033[0m\n"
 	@mix format --check-formatted
 
@@ -34,6 +41,6 @@ docs : restore
 	@MIX_ENV=docs mix docs
 
 # WARNING: Keep this task in sync with pr_validation.yml for parity
-validate : format lint compile test build-plt dialyzer docs
+validate : check-formatted lint compile test build-plt dialyzer docs
 
 .PHONY : compile test format lint validate restore docs build-plt dialyzer
