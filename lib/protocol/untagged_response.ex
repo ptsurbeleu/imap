@@ -72,6 +72,24 @@ defmodule IMAP.UntaggedResponse do
   defp read(state, {:resp_cond_auth, [name, data]}),
     do: read(%{state | name: name}, data)
 
+  defp read(state, {:message_data, [{:nz_number, number}, name, msg_att]}),
+    do: read(%{state | data: number, name: name}, msg_att)
+
+  defp read(state, {:mailbox_data, [data, name]}),
+    do: read(%{state | name: name}, data)
+
+  defp read(state, {:msg_att, _}),
+    do: state
+
   defp read(state, {:resp_text, data}),
     do: %{state | data: ResponseText.from_data(data)}
+
+  defp read(state, {:message_data, [{:nz_number, number}, name]}),
+    do: %{state | data: number, name: name}
+
+  defp read(state, {:nz_number, number}),
+    do: %{state | data: number}
+
+  defp read(state, {:number, number}),
+    do: %{state | data: number}
 end

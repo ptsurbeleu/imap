@@ -7,14 +7,27 @@ defmodule IMAP.Connection do
   responses.
   """
 
+  @type reason :: term()
+  @type transport :: :ssl | :gen_tcp
+  @type session :: {socket_module :: transport(), conn: pid()}
+
+  @callback connect(
+              transport :: transport(),
+              host :: charlist(),
+              port :: non_neg_integer(),
+              opts :: [keyword()]
+            ) ::
+              {:ok, pid()} | {:error, term()}
+
+  @callback send(session(), msg :: iodata()) ::
+              {:ok | {:error, reason()}}
+
+  @callback recv(session()) ::
+              {:ok, binary() | list()} | {:error, reason()}
+
   @doc false
   def connect(socket_module, host, port, opts) do
     socket_module.connect(host, port, opts, 5000)
-  end
-
-  @doc false
-  def setopts({socket_module, conn}, opts) do
-    socket_module.setopts(conn, opts)
   end
 
   @doc false
@@ -26,4 +39,7 @@ defmodule IMAP.Connection do
   def recv({socket_module, conn}) do
     socket_module.recv(conn, 0)
   end
+
+  def disconnect({socket_module, conn}),
+    do: socket_module.disconnect(conn)
 end

@@ -1,5 +1,5 @@
 defmodule IMAP do
-  alias IMAP.{ClientCommand, Connection, Parser, Response}
+  alias IMAP.{ClientCommand, Connection, Parser, Response, TaggedResponse, UntaggedResponse}
   require Logger
 
   @moduledoc """
@@ -39,7 +39,9 @@ defmodule IMAP do
     mailboxes: [],
     logged_in: false,
     tag_number: 0,
-    debug: false
+    debug: false,
+    responses: %{},
+    tagged_responses: %{}
   ]
 
   def new(opts) do
@@ -99,16 +101,57 @@ defmodule IMAP do
   def send_command(pid, %ClientCommand{} = command) do
     session = Agent.get(pid, & &1)
 
-    tag = DateTime.utc_now() |> Calendar.strftime("%Y%d%m.%H%M%S")
+    # NOTE: Preserve an existing tag, in case the command already specifies it (important for the test framework).
+    tag = Map.get(command, :tag, DateTime.utc_now() |> Calendar.strftime("%Y%d%m.%H%M%S"))
 
-    Connection.send(session.conn, ClientCommand.serialize(%{command | tag: tag}))
+    raw_data =
+      ClientCommand.serialize(%{command | tag: tag})
+      |> tap(&("C: #{&1}" |> String.trim_trailing() |> Logger.info()))
 
-    read_response(session)
+    Connection.send(session.conn, raw_data)
+
+    read_server_response(session)
   end
 
-  defp read_response(%{conn: conn} = session) do
+  defp read_server_response(session) do
+    # >>> RFC5301 - 2.2.2.  Server Protocol Sender and Client Protocol Receiver <<<
+    # >>> https://www.rfc-editor.org/rfc/rfc3501.html#section-2.2.2             <<<
+    #
+    # The protocol receiver of an IMAP4rev1 client reads a response line
+    # from the server. It then takes action on the response based upon the
+    # first token of the response, which can be a tag, a "*", or a "+".
+    {:ok, response, "", _, _, _} =
+      case raw_data = read_response(session) do
+        # Untagged response
+        <<"* ", _::binary>> ->
+          Parser.response_data(raw_data)
+
+        # Continuation response
+        <<"+ ", _::binary>> ->
+          Parser.continue_req(raw_data)
+
+        # Tagged response
+        _ ->
+          Parser.response(raw_data)
+      end
+
+    # Translate parser's output into developer-friendly structs
+    case Response.from_data(response, raw_data) do
+      %UntaggedResponse{} ->
+        # NOTE: Discard untagged responses for now (if any)
+        read_server_response(session)
+
+      %TaggedResponse{} = tagged ->
+        tagged |> tap(fn _ -> hangup(session) end)
+    end
+  end
+
+  defp hangup(%{conn: conn}),
+    do: :ok = Connection.disconnect(conn)
+
+  defp read_response(%{conn: conn} = _session) do
     imap_receive_raw(conn)
-    |> tap(&if session.debug, do: "S: #{&1}" |> String.trim_trailing() |> IO.puts())
+    |> tap(&("S: #{&1}" |> String.trim_trailing() |> Logger.info()))
   end
 
   def imap_receive_raw(conn) do
