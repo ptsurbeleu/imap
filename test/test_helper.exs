@@ -1,1 +1,1 @@
-ExUnit.start(formatters: [TestFormatter])
+ExUnit.start()
