@@ -102,11 +102,11 @@ defmodule IMAP do
     session = Agent.get(pid, & &1)
 
     # NOTE: Preserve an existing tag, in case the command already specifies it (important for the test framework).
-    tag = Map.get(command, :tag, DateTime.utc_now() |> Calendar.strftime("%Y%d%m.%H%M%S"))
+    tag = Map.get(command, :tag) || DateTime.utc_now() |> Calendar.strftime("%Y%d%m.%H%M%S")
 
     raw_data =
       ClientCommand.serialize(%{command | tag: tag})
-      |> tap(&("C: #{&1}" |> String.trim_trailing() |> Logger.info()))
+      |> tap(&("C: #{&1}" |> String.trim_trailing() |> Logger.debug()))
 
     Connection.send(session.conn, raw_data)
 
@@ -142,16 +142,16 @@ defmodule IMAP do
         read_server_response(session)
 
       %TaggedResponse{} = tagged ->
-        tagged |> tap(fn _ -> hangup(session) end)
+        tagged
     end
   end
 
-  defp hangup(%{conn: conn}),
-    do: :ok = Connection.disconnect(conn)
+  def hangup(%{conn: conn}),
+    do: :ok = Connection.close(conn)
 
   defp read_response(%{conn: conn} = _session) do
     imap_receive_raw(conn)
-    |> tap(&("S: #{&1}" |> String.trim_trailing() |> Logger.info()))
+    |> tap(&("S: #{&1}" |> String.trim_trailing() |> Logger.debug()))
   end
 
   def imap_receive_raw(conn) do

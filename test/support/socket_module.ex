@@ -17,7 +17,7 @@ defmodule IMAP.SocketModule do
 
   # NOTE: This is merely a wrapper to fetch pid of the agent's process
   def connect(_host, _port, [spid: spid] = _opts, _timeout),
-    do: {:ok, spid} |> tap(&Logger.info("C: connecting... #{inspect(&1)}"))
+    do: {:ok, spid} |> tap(&Logger.debug("C: connecting... #{inspect(&1)}"))
 
   @doc false
   def send(pid, msg) do
@@ -57,7 +57,7 @@ defmodule IMAP.SocketModule do
     {:ok, msg}
   end
 
-  def disconnect(pid) do
+  def close(pid) do
     fd = Agent.get(pid, & &1.fd)
     File.close(fd)
   end

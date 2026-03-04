@@ -51,9 +51,10 @@ defmodule IMAP.ClientCommand do
     params =
       params
       |> List.flatten()
+      |> Enum.filter(&(&1 != nil))
       |> case do
         [] -> nil
-        _ -> Enum.join(params, " ")
+        fp -> Enum.join(fp, " ")
       end
 
     [tag, command, params]
