@@ -40,6 +40,6 @@ defmodule IMAP.Connection do
     socket_module.recv(conn, 0)
   end
 
-  def disconnect({socket_module, conn}),
-    do: socket_module.disconnect(conn)
+  def close({socket_module, conn}),
+    do: socket_module.close(conn)
 end

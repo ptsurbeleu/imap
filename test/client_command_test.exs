@@ -15,4 +15,9 @@ defmodule ClientCommandTest do
   test "LOGOUT" do
     assert "b003 LOGOUT\r\n" == ClientCommand.logout() |> tag("b003") |> ClientCommand.serialize()
   end
+
+  test "LOGIN w/ 1 argument doesn't include extra spaces" do
+    assert "b004 LOGIN anonymous\r\n" ==
+             ClientCommand.login("anonymous", nil) |> tag("b004") |> ClientCommand.serialize()
+  end
 end
