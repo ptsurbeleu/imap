@@ -10,7 +10,7 @@ compile : restore
 	@mix compile --warnings-as-errors
 
 test-me:
-	@iex --dbg pry -S mix test --trace test/imap_test.exs
+	@read -p "~> " PARAMS; iex --dbg pry -S mix test --trace $$PARAMS
 
 test : restore
 	@printf "\033[36m~> mix test\033[0m\n"

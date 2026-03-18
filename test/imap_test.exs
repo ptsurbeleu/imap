@@ -39,4 +39,22 @@ defmodule IMAPTest do
     assert match?(%{name: "OK"}, response), "Expected name to match"
     assert match?(%{data: %{text: "NOOP completed"}}, response), "Expected text to match"
   end
+
+  test "CAPABILITY command", %{imap: pid} do
+    response =
+      IMAP.send_command(pid, ClientCommand.capability() |> tag("a0001"))
+
+    assert match?(%{tag: "a0001"}, response), "Expected tag to match"
+    assert match?(%{name: "OK"}, response), "Expected name to match"
+    assert match?(%{data: %{text: "CAPABILITY completed"}}, response), "Expected text to match"
+  end
+
+  test "CAPABILITY command nested", %{imap: pid} do
+    response =
+      IMAP.send_command(pid, ClientCommand.capability() |> tag("a00003"))
+
+    assert match?(%{tag: "a00003"}, response), "Expected tag to match"
+    assert match?(%{name: "OK"}, response), "Expected name to match"
+    assert match?(%{data: %{text: "CAPABILITY completed"}}, response), "Expected text to match"
+  end
 end
