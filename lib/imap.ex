@@ -61,6 +61,7 @@ defmodule IMAP do
             | Keyword.merge(
                 [
                   active: false,
+                  packet: :line,
                   # NOTE: Requires {:castore, "~> 1.0"}, in mix.exs (deps)
                   # cacertfile: CAStore.file_path(),
                   server_name_indication: to_charlist(host),
@@ -137,7 +138,7 @@ defmodule IMAP do
 
     # Translate parser's output into developer-friendly structs
     case Response.from_data(response, raw_data) do
-      %UntaggedResponse{} ->
+      %UntaggedResponse{} = untagged ->
         # NOTE: Discard untagged responses for now (if any)
         read_server_response(session)
 

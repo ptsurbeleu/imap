@@ -1,5 +1,5 @@
 defmodule IMAP.UntaggedResponse do
-  alias IMAP.ResponseText
+  alias IMAP.{ResponseText, Capability}
 
   @moduledoc """
     Untagged IMAP response.
@@ -68,6 +68,9 @@ defmodule IMAP.UntaggedResponse do
   """
   def from_data(["*", data], raw_data),
     do: read(%__MODULE__{raw_data: raw_data}, data)
+
+  defp read(state, {:capability_data, [name | data]}),
+    do: %{state | name: name, data: Capability.from_data(data)}
 
   defp read(state, {:resp_cond_auth, [name, data]}),
     do: read(%{state | name: name}, data)
