@@ -138,7 +138,7 @@ defmodule IMAP do
 
     # Translate parser's output into developer-friendly structs
     case Response.from_data(response, raw_data) do
-      %UntaggedResponse{} = untagged ->
+      %UntaggedResponse{} = _untagged ->
         # NOTE: Discard untagged responses for now (if any)
         read_server_response(session)
 

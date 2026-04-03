@@ -56,7 +56,7 @@ defmodule CapabilityTest do
 
     assert %{
              data: %{
-               text: "Thats all sheff wrote! d2e1a72fcca58-82a1004806amb45731469b3a"
+               text: "Thats all she wrote! d2e1a72fcca58-82a1004806amb45731469b3a"
              }
            } = response
   end
