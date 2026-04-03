@@ -40,7 +40,11 @@ docs : restore
 	@printf "\033[36m~> mix docs\033[0m\n"
 	@MIX_ENV=docs mix docs
 
-# WARNING: Keep this task in sync with pr_validation.yml for parity
-validate : check-formatted lint compile test build-plt dialyzer docs
+clean:
+	@printf "\033[36m~> mix docs\033[0m\n"
+	@mix deps.clean --unlock --unused
 
-.PHONY : compile test format lint validate restore docs build-plt dialyzer
+# WARNING: Keep this task in sync with pr_validation.yml for parity
+validate : check-formatted clean lint compile test build-plt dialyzer docs
+
+.PHONY : compile test format lint validate restore docs build-plt dialyzer clean
