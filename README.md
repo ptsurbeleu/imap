@@ -11,7 +11,7 @@ by adding `imap` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:imap, "~> 0.1.0"}
+    {:imap, "~> 0.1.2"}
   ]
 end
 ```
