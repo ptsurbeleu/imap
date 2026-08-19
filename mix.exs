@@ -53,7 +53,8 @@ defmodule Imap.MixProject do
       {:ex_doc, ">= 0.0.0", only: [:dev, :docs], runtime: false},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false},
-      {:mox, "~> 1.2", only: [:dev, :test], runtime: false}
+      {:mox, "~> 1.2", only: [:dev, :test], runtime: false},
+      {:version_tasks, "~> 0.12.0", only: [:dev], runtime: false}
     ]
   end
 
